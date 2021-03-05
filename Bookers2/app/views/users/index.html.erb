@@ -1,9 +1,9 @@
 <%= flash[:notice] %>
 
-<% if @book.errors.any? %>
-    <h3>There is an error in the entered content<%= @book.errors.count %>There are cases</h3>
+<% if @book_new.errors.any? %>
+    <h3>There is an error in the entered content<%= @book_new.errors.count %>There are cases</h3>
     <ul>
-      <% @book.errors.full_messages.each do |message| %>
+      <% @book_new.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
     </ul>
@@ -13,23 +13,24 @@
   <div class="row">
     <div class="col-md-3">
       <h2>User info</h2>
-      <%= attachment_image_tag @user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg"%>
+      <%= attachment_image_tag @user_current, :profile_image, :fill, 60, 60, fallback: "no_image.jpg"%>
       <table class='table'>
         <tbody>
         <tr></tr>
         <tr>
 	       <th>name</th>
-         <th><%= @user.name %></th>
+         <th><%= @user_current.name %></th>
        </tr>
        <tr>
          <th>introduction</th>
-         <th><%= @user.introduction %></th>
+         <th><%= @user_current.introduction %></th>
        </tr>
+
        </tbody>
       </table>
 
       <div class="row">
-　　　<%= link_to edit_user_path(@user), class:"btn btn-outline-secondary btn-block" do %><i class="fas fa-user-cog"></i><% end %>
+　　　<%= link_to edit_user_path(@user_current), class:"btn btn-outline-secondary btn-block" do %><i class="fas fa-user-cog"></i><% end %>
 　　　</div>
         <h2 class="mt-3">New book</h2>
         <%= form_with model:@book, local:true do |f| %>
@@ -38,7 +39,7 @@
         <h4>Body</h4>
         <%= f.text_area :body %>
         <%= f.submit class: 'btn btn-success' do %>
-        <span>Create Boo</span>
+        <span>Create Book</span>
         <% end %>
         </form>
         </div>
@@ -59,6 +60,17 @@
       <tr>
       <td><%= attachment_image_tag user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg"%></td>
       <td><%= user.name %></td>
+      <td><p><%= "フォロー数: #{user.follower.count}" %></p></td>
+      <td><p><%= "フォロワー数: #{user.followed.count}" %></p></td>
+      <% unless user == current_user %>
+      <td>
+        <% if current_user.following?(user) %>
+        <%= link_to 'フォロー外す', user_relationships_path(user.id), method: :delete %>
+        <% else %>
+        <%= link_to 'フォローする', user_relationships_path(user.id), method: :POST %>
+        <% end %>
+        <% end %>
+      </td>
       <td><%= link_to 'Show', user_path(user.id) %></td>
       </tr>
     </tbody>

@@ -25,6 +25,35 @@
          <th>introduction</th>
          <th><%= @user.introduction %></th>
        </tr>
+       <tr>
+         <th>follows</th>
+         <th><%= "#{@user.follower.count}" %></th>
+       </tr>
+       <tr>
+         <th>followers</th>
+         <th><%= "#{@user.followed.count}" %></th>
+       </tr>
+
+       <tr>
+         <% unless @user == current_user %>
+         <th>
+         <% if current_user.following?(@user) %>
+         <%= link_to user_relationships_path(@user.id), method: :delete do %>
+         <div class="btn btn-danger">
+         <span>フォロー外す</span>
+         </div>
+         <% end %>
+         <% else %>
+         <%= link_to user_relationships_path(@user.id), method: :POST do %>
+         <div class="btn btn-success">
+         <span>フォローする</span>
+         </div>
+         <% end %>
+         <% end %>
+         <% end %>
+         </th>
+       </tr>
+
        </tbody>
       </table>
       <div class="row">
@@ -65,6 +94,7 @@
         <%= link_to book.title, "/books/#{book.id}" %>
       </td>
       <td><%= book.body %></td>
+      <td><p><%= link_to "#{book.book_comments.count} コメント", book_path(book.id) %></p></td>
       </tr>
     </tbody>
      <% end %>

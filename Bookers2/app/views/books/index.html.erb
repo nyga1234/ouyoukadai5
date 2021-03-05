@@ -1,9 +1,9 @@
 <%= flash[:notice] %>
 
-<% if @book.errors.any? %>
-    <h3>There is an error in the entered content<%= @book.errors.count %>There are cases</h3>
+<% if @book_new.errors.any? %>
+    <h3>There is an error in the entered content<%= @book_new.errors.count %>There are cases</h3>
     <ul>
-      <% @book.errors.full_messages.each do |message| %>
+      <% @book_new.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
     </ul>
@@ -25,6 +25,7 @@
          <th>introduction</th>
          <th><%= current_user.introduction %></th>
        </tr>
+       
        </tbody>
       </table>
       <div class="row">
@@ -65,6 +66,20 @@
       </td>
       <td><%= link_to book.title, "/books/#{book.id}" %></td>
       <td><%= book.body %></td>
+      <td><% if book.favorited_by?(current_user) %>
+    <p>
+      <%= link_to book_favorites_path(book), method: :delete do %>
+        ♥<%= book.favorites.count %> いいね
+      <% end %>
+    </p>
+    <% else %>
+    <p>
+      <%= link_to book_favorites_path(book), method: :post do %>
+        ♡<%= book.favorites.count %> いいね
+      <% end %>
+    </p>
+  <% end %></td>
+  <td><p><%= link_to "#{book.book_comments.count} コメント", book_path(book.id) %></p></td>
       </tr>
     </tbody>
      <% end %>
