@@ -25,6 +25,14 @@
          <th>introduction</th>
          <th><%= @user_current.introduction %></th>
        </tr>
+       <tr>
+       <th>follows</th>
+         <th><%= link_to "#{@user_current.follower.count}", user_follower_path(@user_current.id) %></th>
+       </tr>
+       <tr>
+         <th>followers</th>
+         <th><%= link_to "#{@user_current.followed.count}", user_followed_path(@user_current.id) %></th>
+       </tr>
 
        </tbody>
       </table>
@@ -41,7 +49,6 @@
         <%= f.submit class: 'btn btn-success' do %>
         <span>Create Book</span>
         <% end %>
-        </form>
         </div>
         <% end %>
 
